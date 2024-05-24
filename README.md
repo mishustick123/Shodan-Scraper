@@ -2,7 +2,7 @@
 Bs4 and Selenium based scraper
 # How to use
 python shodan.py
-#Requirements
+# Requirements
 Selenium
 Bs4
 progress
