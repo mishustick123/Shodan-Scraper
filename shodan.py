@@ -22,20 +22,20 @@ stealth(browser,
         )
 
 
-part1_domain = 'https://www.shodan.io/search?query=Android+Debug+Bridge+Name%3A+country%3A'
-part2_domain = input('Введите букавы региона: ')
+part1_domain = 'query' # query like https://www.shodan.io/search?query=Android+Debug+Bridge+Name%3A+country%3A 
+part2_domain = input('Country code : ')
 os.system('cls' if os.name == 'nt' else 'clear')
 final_domain = part1_domain + part2_domain
 
 login_url = 'https://account.shodan.io/login'
 
-txt_dump = open('K:\selenium\shodan\weatifulsoup\devices.txt', 'a')
+txt_dump = open('devices.txt', 'a')
 
 def login():
-    print('Произвожу вход в аккаунт!')
+    print('Logging into account!')
     browser.get('https://account.shodan.io/login?')
-    browser.find_element(by=By.ID, value='username').send_keys('rcollins52')
-    browser.find_element(by= By.ID, value='password').send_keys('Waffle@9880')
+    browser.find_element(by=By.ID, value='username').send_keys('') # username
+    browser.find_element(by= By.ID, value='password').send_keys('') #password
     press_enter_xpath = '/html/body/div[2]/main/div/div/div/div[1]/form/div[3]/input'
     browser.find_element(by=By.XPATH, value=press_enter_xpath).click()  
     print('Бот успешно зашёл в аккаунт!')
