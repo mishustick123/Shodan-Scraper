@@ -3,7 +3,4 @@ BeautifulSoup and Selenium based scraper
 # How to use
 python shodan.py
 # Requirements
-Selenium
-bs4
-progress
-selenium_stealth
+pip3 install selenium bs4 progress selenium_stealth
