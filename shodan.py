@@ -6,13 +6,35 @@ from selenium.webdriver.chrome.options import Options
 from progress.bar import Bar
 import os
 import time
+import pycountry
+from urllib import parse
+import argparse
+
+parser = argparse.ArgumentParser(description='The best shodan scraper!')
+parser.add_argument(
+                    '-q',
+                    '--query',
+                    type=str,
+                    help='Ur query',
+                    required=True)
+parser.add_argument(
+                    '--show',
+                    type=bool,
+                    help='Show process of scraping',
+                    required=False)
+
+args = parser.parse_args()
 
 options = Options()
-options.add_argument("--headless=new")
-
 browser = webdriver.Chrome(options=options)
+login_url = 'https://account.shodan.io/login'
+name = input('Введите название файла для сохранения: ')
+txt_dump = open(f'K:\selenium\shodan\weatifulsoup\{name}.txt', 'a')
 
-stealth(browser,                        # fake headers
+if args.show == False:
+    options.add_argument("--headless=new")
+
+stealth(browser,
         languages=["en-US", "en"],
         vendor="Google Inc.",
         platform="Win32",
@@ -21,40 +43,38 @@ stealth(browser,                        # fake headers
         fix_hairline=True,
         )
 
-
-part1_domain = 'query' # query like https://www.shodan.io/search?query=Android+Debug+Bridge+Name%3A+country%3A 
-part2_domain = input('Country code : ')
-os.system('cls' if os.name == 'nt' else 'clear')
-final_domain = part1_domain + part2_domain
-
-login_url = 'https://account.shodan.io/login'
-
-txt_dump = open('devices.txt', 'a') # dumping results into devices.txt
-
 def login():
-    print('Logging into account!')
+    print('Произвожу вход в аккаунт!')
     browser.get('https://account.shodan.io/login?')
-    browser.find_element(by=By.ID, value='username').send_keys('') # username
-    browser.find_element(by= By.ID, value='password').send_keys('') #password
+    browser.find_element(by=By.ID, value='username').send_keys('rcollins52')
+    browser.find_element(by= By.ID, value='password').send_keys('Waffle@9880')
     press_enter_xpath = '/html/body/div[2]/main/div/div/div/div[1]/form/div[3]/input'
-    browser.find_element(by=By.XPATH, value=press_enter_xpath).click()   # pressing log in button
-    print('Login succesful!')
+    browser.find_element(by=By.XPATH, value=press_enter_xpath).click()  
+    print('Бот успешно зашёл в аккаунт!')
     time.sleep(2)
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def main(page_counter=1):
+def main():
     login()     
-    bar = Bar('Scraping', fill='#', suffix='%(percent)d%%')   # cool progress bar
-    for i in range(20):
-        browser.get(f'{final_domain}&page={page_counter}')
-        soup = BeautifulSoup(browser.page_source, 'html.parser')
-        ips = soup.findAll('a', class_='title text-dark') # finding ip adresses
-        for host in ips:
-            href = host['href'].split('/')[-1]
-            txt_dump.write(f'{href}\n')
-        
-        page_counter += 1
-        bar.next(5)
+    bar = Bar('Scraping', fill='#', suffix='%(percent)d%%')   
+    for country in pycountry.countries:
+        domain = f'https://www.shodan.io/search?query={parse.quote(args.query)}+country%3A'
+        page_counter = 1
+        for country in pycountry.countries:
+            for i in range(20):
+                code = country.alpha_2
+                full_domain = domain + code
+                browser.get(f'{full_domain}&page={page_counter}')
+                soup = BeautifulSoup(browser.page_source, 'html.parser')
+                ips = soup.findAll('a', class_='title text-dark')
+                for host in ips:
+                    href = host['href'].split('/')[-1]
+                    txt_dump.write(f'{href}\n')
+                page_counter += 1
+                if len(ips) == 0:
+                    page_counter = 1
+                    bar.next(100/len(pycountry.countries))
+                    break    
 
 if __name__ == "__main__" :
     main()
