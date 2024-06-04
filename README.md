@@ -4,3 +4,5 @@ BeautifulSoup and Selenium based scraper
 python shodan.py --query/-q 'query' --show False/True(Show browser,not required)
 # Requirements
 pip3 install selenium bs4 progress selenium_stealth
+Chrome
+Chrome webdriver https://chromedriver.storage.googleapis.com/index.html
