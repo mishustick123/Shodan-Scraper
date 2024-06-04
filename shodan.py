@@ -59,8 +59,8 @@ stealth(browser,
 def login():
     print('Произвожу вход в аккаунт!')
     browser.get('https://account.shodan.io/login?')
-    browser.find_element(by=By.ID, value='username').send_keys(parse.quote(args.username))
-    browser.find_element(by= By.ID, value='password').send_keys(parse.quote(args.password))
+    browser.find_element(by=By.ID, value='username').send_keys(args.username)
+    browser.find_element(by= By.ID, value='password').send_keys(args.password)
     press_enter_xpath = '/html/body/div[2]/main/div/div/div/div[1]/form/div[3]/input'
     browser.find_element(by=By.XPATH, value=press_enter_xpath).click()  
     print('Бот успешно зашёл в аккаунт!')
