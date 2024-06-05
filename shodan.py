@@ -36,13 +36,19 @@ parser.add_argument(
                     help='Password',
                     required=True
 )
+parser.add_argument(
+                    '-o',
+                    '--output',
+                    type=str,
+                    help='Output',
+                    required=True
+)
 args = parser.parse_args()
 
 options = Options()
 browser = webdriver.Chrome(options=options)
 login_url = 'https://account.shodan.io/login'
-name = input('Введите название файла для сохранения: ')
-txt_dump = open(f'K:\selenium\shodan\weatifulsoup\{name}.txt', 'a')
+txt_dump = open(args.output, 'a')
 
 if args.show == False:
     options.add_argument("--headless=new")
