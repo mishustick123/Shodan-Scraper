@@ -1,4 +1,4 @@
-# Shodan-Scraper
+# Shodan Scraper
 BeautifulSoup and Selenium based scraper
 # How to use
 python shodan.py --query/-q 'query' -u/--username username -p/--password password --show False/True(Show browser,not required) -o/--output file.txt
